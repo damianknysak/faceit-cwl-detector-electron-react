@@ -6,7 +6,7 @@ export type Channels = 'ipc-example';
 
 const electronHandler = {
   ipcRenderer: {
-    nodeFetch: async () => ipcRenderer.invoke('node:fetch'),
+    nodeFetch: async (uri: string) => ipcRenderer.invoke('node:fetch', uri),
     sendMessage(channel: Channels, ...args: unknown[]) {
       ipcRenderer.send(channel, ...args);
     },

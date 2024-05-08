@@ -71,6 +71,7 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
+    resizable: false,
     width: 1024,
     height: 728,
     icon: getAssetPath('icon.png'),
@@ -137,16 +138,12 @@ app
   })
   .catch(console.log);
 
-ipcMain.handle('node:fetch', async (_, args) => {
-  const asyncFunc = async () => {
-    const response = await fetch(
-      'https://www.faceit.com/api/users/v1/nicknames/ANNIHILATI0N',
-    );
+ipcMain.handle('node:fetch', async (_, uri: string) => {
+  try {
+    const response = await fetch(uri);
     const responseJson = await response.json();
     return responseJson;
-  };
-
-  const result = await asyncFunc();
-  console.log('RESULT', result);
-  return result;
+  } catch (err) {
+    console.error('NODE FETCH ERROR', err);
+  }
 });
