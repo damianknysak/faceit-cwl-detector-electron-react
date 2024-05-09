@@ -4,7 +4,9 @@ import 'tailwindcss/tailwind.css';
 import Home from './Routes/Home';
 import Settings from './Routes/Settings';
 import Navbar from './Components/Shared/Navbar';
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const SettingsContext = createContext({});
 export default function App() {
@@ -15,8 +17,15 @@ export default function App() {
     'ZoQu15',
     'ffomzpom',
   ]);
+
   return (
-    <SettingsContext.Provider value={[defaultPlayers, setDefaultPlayers]}>
+    <SettingsContext.Provider
+      value={{
+        defaultPlayersState: [defaultPlayers, setDefaultPlayers],
+      }}
+    >
+      <ToastContainer position="top-center" />
+
       <Router>
         <Navbar />
         <Routes>

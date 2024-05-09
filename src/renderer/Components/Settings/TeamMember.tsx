@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import useDataFetching from '../../hooks/useDataFetching';
 import { ClipLoader } from 'react-spinners';
 import {
   BoltIcon,
   ChartBarIcon,
-  TrashIcon,
   UserIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
+import { toast } from 'react-toastify';
+import { SettingsContext } from '../../App';
 
 interface TeamMemberProps {
   player: string;
@@ -18,16 +19,29 @@ const TeamMember: React.FC<TeamMemberProps> = ({ player, removeFunc }) => {
   const { data, isLoading, error } = useDataFetching(
     `https://www.faceit.com/api/users/v1/nicknames/${player}`,
   );
+
   const [playerProps, setPlayerProps] = useState<Player | null>(null);
 
   useEffect(() => {
+    if (error || data?.errors) {
+      toast.error('Wrong player');
+      removeFunc(player);
+      return;
+    }
+
+    if (data && !data.payload?.games?.cs2) {
+      toast.error("This player don't play cs2");
+      removeFunc(player);
+      return;
+    }
+
     if (data && !isLoading && !error) {
       setPlayerProps(data.payload);
     }
   }, [data, isLoading, error]);
 
   return (
-    <div className="relative flex-1 rounded-xl shadow-md shadow-[#1dbac5]">
+    <div className="flex justify-center items-center relative flex-1 rounded-xl shadow-md shadow-[#1dbac5]">
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
           <ClipLoader

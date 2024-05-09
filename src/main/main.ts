@@ -14,6 +14,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import ElectronStore from 'electron-store';
 
 class AppUpdater {
   constructor() {
@@ -74,6 +75,7 @@ const createWindow = async () => {
     resizable: false,
     width: 1024,
     height: 728,
+    autoHideMenuBar: true,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
