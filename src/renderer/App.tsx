@@ -7,6 +7,7 @@ import Navbar from './Components/Shared/Navbar';
 import { createContext, useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Search from './Routes/Search';
 
 export const SettingsContext = createContext({});
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/search/:username" element={<Search />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </Router>

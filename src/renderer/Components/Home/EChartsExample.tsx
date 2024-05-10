@@ -3,21 +3,20 @@ import * as echarts from 'echarts';
 
 const PieChartExample: React.FC<{
   data: { [x: string]: PlayerMatchStats }[];
-}> = ({ data }) => {
+  dataSource: string;
+  id: string;
+}> = ({ data, dataSource, id }) => {
   useEffect(() => {
-    // Pobierz element DOM, do którego chcesz dodać wykres
-    const chartContainer = document.getElementById('pie-chart-container');
+    const chartContainer = document.getElementById(`pie-chart-${id}`);
 
-    // Inicjalizuj ECharts
     const myChart = echarts.init(chartContainer);
 
     const chartData = data.map((el) => {
-      let key = Object.keys(el)[0];
-      return { value: el[key].kills, name: key };
+      const key = Object.keys(el)[0];
+      const value: any = el[key];
+      return { value: Number(value[dataSource]), name: key };
     });
 
-    console.log('chartData', chartData);
-    // Ustaw opcje wykresu
     const options = {
       tooltip: {
         trigger: 'item',
@@ -26,13 +25,12 @@ const PieChartExample: React.FC<{
         top: '5%',
         left: 'center',
         textStyle: {
-          fontSize: 12, // Rozmiar czcionki
-          color: '#1dbac5', // Kolor tekstu
+          fontSize: 12,
+          color: '#1dbac5',
         },
       },
       series: [
         {
-          name: 'Kills count',
           type: 'pie',
           radius: ['40%', '70%'],
           avoidLabelOverlap: false,
@@ -59,17 +57,15 @@ const PieChartExample: React.FC<{
       ],
     };
 
-    // Ustaw opcje i renderuj wykres
     myChart.setOption(options);
 
-    // Zwróć funkcję czyszczącą wykres
     return () => {
       myChart.dispose();
     };
-  }, []); // Użyj pustej tablicy zależności, aby efekt wykonał się tylko raz
+  }, [data, dataSource]);
 
   return (
-    <div id="pie-chart-container" style={{ width: '500px', height: '400px' }} />
+    <div id={`pie-chart-${id}`} style={{ width: '500px', height: '400px' }} />
   );
 };
 

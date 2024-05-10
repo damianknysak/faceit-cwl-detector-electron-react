@@ -39,13 +39,18 @@ const Navbar = () => {
         <li className="mb-6 relative">
           <div
             className={`absolute top-1/2 bg-[#1dbac5] w-2 h-2 rounded-full ${
-              activeRoute === '/search' ? 'block' : 'hidden'
+              activeRoute.startsWith('/search') ? 'block' : 'hidden'
             }`}
           ></div>
-          <Link className="flex justify-center" to="/search">
+          <Link
+            className="flex justify-center"
+            to="/search/default-empty-state"
+          >
             <MagnifyingGlassIcon
               className={`${
-                activeRoute === '/search' ? 'text-[#1dbac5]' : 'text-gray-500'
+                activeRoute.startsWith('/search')
+                  ? 'text-[#1dbac5]'
+                  : 'text-gray-500'
               } size-10`}
             />
           </Link>

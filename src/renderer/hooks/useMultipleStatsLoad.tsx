@@ -34,6 +34,7 @@ const useMultipleStatsLoad = (
     const json = await getResponseJson(
       `https://www.faceit.com/api/stats/v1/stats/time/users/${playerId}/games/cs2?page=0&size=${matches_to_compare}`,
     );
+    console.log('PLAYERS GAMES', json);
     return json;
   };
 
@@ -69,8 +70,8 @@ const useMultipleStatsLoad = (
   };
 
   useEffect(() => {
-    setIsLoading(true);
     const fetchData = async () => {
+      setIsLoading(true);
       const resultsArray: {
         [x: string]: PlayerMatchStats;
       }[] = [];
@@ -82,10 +83,10 @@ const useMultipleStatsLoad = (
         resultsArray.push({ [nickname]: stats });
       }
       setData(resultsArray);
+      setIsLoading(false);
     };
 
     fetchData();
-    setIsLoading(false);
   }, [nicknames, matches_to_compare]);
 
   return { data, isLoading, error };

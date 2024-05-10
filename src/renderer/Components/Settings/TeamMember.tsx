@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import useDataFetching from '../../hooks/useDataFetching';
-import { ClipLoader } from 'react-spinners';
+import { HashLoader } from 'react-spinners';
 import {
   BoltIcon,
   ChartBarIcon,
@@ -44,7 +44,7 @@ const TeamMember: React.FC<TeamMemberProps> = ({ player, removeFunc }) => {
     <div className="flex justify-center items-center relative flex-1 rounded-xl shadow-md shadow-[#1dbac5]">
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
-          <ClipLoader
+          <HashLoader
             color="#1dbac5"
             loading={isLoading}
             size={50}

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import * as echarts from 'echarts';
 
-const LineChart: React.FC<{
-  data: { [x: string]: PlayerMatchStats }[];
+const LineChartMaps: React.FC<{
+  data: RenamedPlayerOverallStats | null;
   dataSource: string;
 }> = ({ data, dataSource }) => {
   useEffect(() => {
@@ -10,11 +10,16 @@ const LineChart: React.FC<{
 
     const myChart = echarts.init(chartContainer);
 
-    const chartData = data.map((el) => {
-      const key = Object.keys(el)[0];
-      const value: any = el[key];
-      return { value: Number(value[dataSource]), name: key };
-    });
+    const obj: any = data?.segments[1]?.segments;
+    const maps = Object.keys(obj);
+    const getChartData = () => {
+      const resultArr = [];
+      for (const map of maps) {
+        const mapStats = data?.segments[1].segments[map];
+        resultArr.push(mapStats?.[dataSource]);
+      }
+      return resultArr;
+    };
 
     const shortenXaxisLabel = (str: string) => {
       if (str.length > 9) {
@@ -24,14 +29,27 @@ const LineChart: React.FC<{
       }
     };
 
-    const chartXaxis = data.map((el) => shortenXaxisLabel(Object.keys(el)[0]));
-    console.log('chartXaxis', chartXaxis);
+    const getXaxis = () => {
+      return maps.map((el) => shortenXaxisLabel(el));
+    };
 
-    const colors = ['#ff9f1c', '#ffbf69', '#ffffff', '#cbf3f0', '#2ec4b6'];
+    const colors = [
+      '#ff9f1c',
+      '#ffbf69',
+      '#ffffff',
+      '#cbf3f0',
+      '#2ec4b6',
+      '#7fcd91',
+      '#a8d0e6',
+      '#d8b8ff',
+      '#f7786b',
+      '#e71d36',
+    ];
+
     const options = {
       xAxis: {
         type: 'category',
-        data: chartXaxis,
+        data: getXaxis(),
         axisLabel: {
           color: '#1dbac5',
         },
@@ -50,7 +68,7 @@ const LineChart: React.FC<{
       },
       series: [
         {
-          data: chartData,
+          data: getChartData(),
           type: 'bar',
           itemStyle: {
             color: function (params: any) {
@@ -65,7 +83,7 @@ const LineChart: React.FC<{
     return () => {
       myChart.dispose();
     };
-  }, [dataSource, data]);
+  }, [data, dataSource]);
 
   return (
     <>
@@ -76,5 +94,4 @@ const LineChart: React.FC<{
     </>
   );
 };
-
-export default LineChart;
+export default LineChartMaps;
