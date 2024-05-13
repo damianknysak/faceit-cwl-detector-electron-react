@@ -37,7 +37,9 @@ const Search = () => {
           onKeyDown={handleKeyDown}
         />
       </div>
-      {searchActive && <SearchResults player={finalUser} />}
+      {searchActive && (
+        <SearchResults player={finalUser} setSearchActive={setSearchActive} />
+      )}
     </div>
   );
 };

@@ -17,17 +17,27 @@ const useOverallStatsFetching = (nickname: string) => {
   };
 
   const getPlayerId = async (nickname: string) => {
-    const json = await getResponseJson(
-      `https://www.faceit.com/api/users/v1/nicknames/${nickname}`,
-    );
-    return json.payload.id;
+    try {
+      const json = await getResponseJson(
+        `https://www.faceit.com/api/users/v1/nicknames/${nickname}`,
+      );
+      return json.payload.id;
+    } catch (err) {
+      console.error(err);
+      setError(err);
+    }
   };
 
   const getPlayerOverallStats = async (playerId: string) => {
-    const json = await getResponseJson(
-      `https://www.faceit.com/api/stats/v1/stats/users/${playerId}/games/cs2`,
-    );
-    return json;
+    try {
+      const json = await getResponseJson(
+        `https://www.faceit.com/api/stats/v1/stats/users/${playerId}/games/cs2`,
+      );
+      return json;
+    } catch (err) {
+      console.error(err);
+      setError(err);
+    }
   };
 
   const calculateStats = (rawStats: PlayerOverallStats) => {
@@ -76,14 +86,19 @@ const useOverallStatsFetching = (nickname: string) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true);
-      const playerId = await getPlayerId(nickname);
-      const overallStats: PlayerOverallStats =
-        await getPlayerOverallStats(playerId);
-      const result = calculateStats(overallStats);
+      try {
+        setIsLoading(true);
+        const playerId = await getPlayerId(nickname);
+        const overallStats: PlayerOverallStats =
+          await getPlayerOverallStats(playerId);
+        const result = calculateStats(overallStats);
 
-      setData(result);
-      setIsLoading(false);
+        setData(result);
+        setIsLoading(false);
+      } catch (err) {
+        console.error(err);
+        setError(err);
+      }
     };
 
     fetchData();

@@ -4,8 +4,12 @@ import { HashLoader } from 'react-spinners';
 import useDataFetching from '../../hooks/useDataFetching';
 import { BoltIcon, ChartBarIcon, UserIcon } from '@heroicons/react/24/outline';
 import MapsCompare from './MapsCompare';
+import { toast } from 'react-toastify';
 
-const SearchResults: React.FC<{ player: string }> = ({ player }) => {
+const SearchResults: React.FC<{
+  player: string;
+  setSearchActive: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ player, setSearchActive }) => {
   const { data, error, isLoading } = useOverallStatsFetching(player);
   const {
     data: profileData,
@@ -18,6 +22,11 @@ const SearchResults: React.FC<{ player: string }> = ({ player }) => {
   const [overallPlayerStats, setOverallPlayerStats] =
     useState<RenamedPlayerOverallStats | null>(null);
   useEffect(() => {
+    if (error || isProfileError) {
+      toast.warn('Player not found');
+      setSearchActive(false);
+    }
+
     if (profileData && !isProfileLoading && !isProfileError) {
       setPlayerProfile(profileData.payload);
     }
